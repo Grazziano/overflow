@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import './globals.css';
+import UIProvider from '@/providers/UIProvider';
 
 export const metadata: Metadata = {
   title: 'Overflow | Dev',
@@ -14,7 +15,9 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body>{children}</body>
+      <body>
+        <UIProvider>{children}</UIProvider>
+      </body>
     </html>
   );
 }
