@@ -1,15 +1,7 @@
-import { currentUser } from '@clerk/nextjs';
-import { User } from '@clerk/nextjs/server';
-
-export default async function Home() {
-  const user: User | null = await currentUser();
-
+export default function Home() {
   return (
     <div>
       <h1>Homepage</h1>
-
-      <h1>Logged in user FirstName: {user?.firstName}</h1>
-      <h1>Logged in user LastName: {user?.lastName}</h1>
     </div>
   );
 }

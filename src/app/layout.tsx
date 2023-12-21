@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import './globals.css';
 import UIProvider from '@/providers/UIProvider';
 import { ClerkProvider } from '@clerk/nextjs';
+import LayoutProvider from '@/providers/LayoutProvider';
 
 export const metadata: Metadata = {
   title: 'Overflow | Dev',
@@ -18,7 +19,9 @@ export default function RootLayout({
     <ClerkProvider>
       <html lang="en">
         <body>
-          <UIProvider>{children}</UIProvider>
+          <UIProvider>
+            <LayoutProvider>{children}</LayoutProvider>
+          </UIProvider>
         </body>
       </html>
     </ClerkProvider>
