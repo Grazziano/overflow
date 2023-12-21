@@ -1,3 +1,4 @@
+import { handleNewUserRegistration } from '@/actions/users';
 import { connectDB } from '@/config/db';
 import { currentUser } from '@clerk/nextjs';
 import { User } from '@clerk/nextjs/server';
@@ -5,6 +6,7 @@ import { User } from '@clerk/nextjs/server';
 connectDB();
 
 export default async function Home() {
+  await handleNewUserRegistration();
   const user: User | null = await currentUser();
 
   return (
