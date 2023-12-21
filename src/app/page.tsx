@@ -1,29 +1,15 @@
-'use client';
-import { Button } from '@nextui-org/react';
-import toast from 'react-hot-toast';
-import { UserButton, useUser } from '@clerk/nextjs';
+import { currentUser } from '@clerk/nextjs';
+import { User } from '@clerk/nextjs/server';
 
-export default function Home() {
-  const user = useUser();
-
-  console.log(user);
+export default async function Home() {
+  const user: User | null = await currentUser();
 
   return (
     <div>
       <h1>Homepage</h1>
 
-      <div className="p-10">
-        <UserButton afterSignOutUrl="/" />
-
-        <Button
-          color="secondary"
-          onClick={() => {
-            toast.success('hello world');
-          }}
-        >
-          Click Me
-        </Button>
-      </div>
+      <h1>Logged in user FirstName: {user?.firstName}</h1>
+      <h1>Logged in user LastName: {user?.lastName}</h1>
     </div>
   );
 }
