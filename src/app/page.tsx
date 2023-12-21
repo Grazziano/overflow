@@ -13,7 +13,7 @@ export default function Home() {
       <h1>Homepage</h1>
 
       <div className="p-10">
-        <UserButton />
+        <UserButton afterSignOutUrl="/" />
 
         <Button
           color="secondary"
