@@ -31,7 +31,7 @@ export default function QuestionForm() {
       setLoading(true);
       await axios.post('/api/questions', question);
       toast.success('Question created successfully');
-      router.push('/questions');
+      router.push('/');
     } catch (error: any) {
       toast.error(error.response.data.message || error.message);
     } finally {
