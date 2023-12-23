@@ -28,3 +28,17 @@ export const handleNewUserRegistration = async () => {
     console.log(error);
   }
 };
+
+export const getMongoDbUserIdFromClerkUserId = async (clerkUserId: string) => {
+  try {
+    const user = await UserModel.findOne({ clerkUserId });
+
+    if (!user) {
+      throw new Error('User not found');
+    }
+
+    return user._id;
+  } catch (error: any) {
+    throw new Error(error.message);
+  }
+};
