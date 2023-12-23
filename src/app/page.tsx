@@ -2,6 +2,7 @@ import { handleNewUserRegistration } from '@/actions/users';
 import { connectDB } from '@/config/db';
 import { currentUser } from '@clerk/nextjs';
 import { User } from '@clerk/nextjs/server';
+import Link from 'next/link';
 
 connectDB();
 
@@ -11,9 +12,14 @@ export default async function Home() {
 
   return (
     <div>
-      <h1>Homepage</h1>
-      <h1>Logged in user FirstName: {user?.firstName}</h1>
-      <h1>Logged in user LastName: {user?.lastName}</h1>
+      <div className="flex justify-end">
+        <Link
+          href="/questions/new-question"
+          className="bg-primary text-white px-4 py-2 rounded"
+        >
+          Ask a question
+        </Link>
+      </div>
     </div>
   );
 }
