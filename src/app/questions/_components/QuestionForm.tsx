@@ -1,16 +1,21 @@
 'use client';
 import React, { useState } from 'react';
-import { Button, Input, Textarea } from '@nextui-org/react';
+import { Button, Input, Switch, Textarea } from '@nextui-org/react';
+import { javascript } from '@codemirror/lang-javascript';
+import CodeMirror from '@uiw/react-codemirror';
 
 interface QuestionInterface {
   title: string;
   description: string;
+  code: string;
 }
 
 export default function QuestionForm() {
+  const [showCode, setShowCode] = useState<boolean>(false);
   const [question, setQuestion] = useState<QuestionInterface>({
     title: '',
     description: '',
+    code: '',
   });
 
   const onsubmit = (e: React.FormEvent<HTMLFormElement>) => {
@@ -41,6 +46,27 @@ export default function QuestionForm() {
         }
         labelPlacement="outside"
       />
+
+      <Switch
+        placeholder="Do you want add code?"
+        defaultChecked={showCode}
+        onChange={() => setShowCode(!showCode)}
+      >
+        <span className="text-gray-600">Do you want add code?</span>
+      </Switch>
+
+      {showCode && (
+        <CodeMirror
+          value="console.log('hello world!');"
+          height="200px"
+          theme="dark"
+          extensions={[javascript({ jsx: true })]}
+          onChange={(value) => {
+            setQuestion({ ...question, code: value });
+          }}
+          defaultValue={question.code}
+        />
+      )}
 
       <div className="flex justify-end gap-5">
         <Button>Cancel</Button>

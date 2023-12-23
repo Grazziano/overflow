@@ -10,7 +10,9 @@
   },
   "dependencies": {
     "@clerk/nextjs": "^4.29.0",
+    "@codemirror/lang-javascript": "^6.2.1",
     "@nextui-org/react": "^2.2.9",
+    "@uiw/react-codemirror": "^4.21.21",
     "axios": "^1.6.2",
     "dayjs": "^1.11.10",
     "framer-motion": "^10.16.16",
