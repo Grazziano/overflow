@@ -4,6 +4,8 @@ import QuestionModel from '@/models/questionModel';
 import { dateTimeFormat } from '@/helpers/date-time-formats';
 import ViewCode from '@/components/ViewCode';
 import QuestionInfoFooter from '../_components/QuestionInfoFooter';
+import { currentUser } from '@clerk/nextjs';
+import { getMongoDbUserIdFromClerkUserId } from '@/actions/users';
 
 interface ViewQuestionProps {
   params: {
@@ -15,6 +17,11 @@ export default async function ViewQuestion({ params }: ViewQuestionProps) {
   const question: IQuestion = (await QuestionModel.findById(
     params.questionid
   ).populate('user')) as IQuestion;
+
+  const currentUserData = await currentUser();
+  const mongoDbUserId = await getMongoDbUserIdFromClerkUserId(
+    currentUserData?.id!
+  );
 
   return (
     <div>
@@ -41,7 +48,10 @@ export default async function ViewQuestion({ params }: ViewQuestionProps) {
 
         <ViewCode code={question.code} />
 
-        <QuestionInfoFooter question={JSON.parse(JSON.stringify(question))} />
+        <QuestionInfoFooter
+          question={JSON.parse(JSON.stringify(question))}
+          mongoDbUserId={mongoDbUserId.toString()}
+        />
       </div>
     </div>
   );

@@ -2,13 +2,16 @@
 import React, { useState } from 'react';
 import { IQuestion } from '@/interfaces';
 import { Button } from '@nextui-org/react';
+import AnswerForm from './AnswerForm';
 
 interface QuestionInfoFooterProps {
   question: IQuestion;
+  mongoDbUserId: string;
 }
 
 export default function QuestionInfoFooter({
   question,
+  mongoDbUserId,
 }: QuestionInfoFooterProps) {
   const [showNewAnswerModal, setShowNewAnswerModal] = useState<boolean>(false);
 
@@ -23,10 +26,18 @@ export default function QuestionInfoFooter({
           size="sm"
           color="secondary"
           onClick={() => setShowNewAnswerModal(true)}
+          isDisabled={mongoDbUserId === question.user._id}
         >
           Write an Answer
         </Button>
       </div>
+
+      {showNewAnswerModal && (
+        <AnswerForm
+          showAnswerForm={showNewAnswerModal}
+          setShowAnswerForm={setShowNewAnswerModal}
+        />
+      )}
     </div>
   );
 }
