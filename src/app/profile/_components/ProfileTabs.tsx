@@ -1,6 +1,6 @@
 'use client';
 import React from 'react';
-import { Tabs, Tab } from '@nextui-org/react';
+import { Tabs, Tab, Button } from '@nextui-org/react';
 import { useRouter } from 'next/navigation';
 import { IQuestion } from '@/interfaces';
 
@@ -17,6 +17,31 @@ export default function ProfileTabs({
 }: ProfileTabsProps) {
   const router = useRouter();
 
+  const getQuestion = (question: IQuestion) => (
+    <div className="border p-3 flex flex-col gap-2 bg-gray-50 cursor-pointer hover:border-gray-700">
+      <h1>{question.title}</h1>
+      <span className="text-gray-500 text-sm line-clamp-2">
+        {question.description}
+      </span>
+
+      <div className="flex justify-end gap-5 mt-5">
+        <Button size="sm" color="secondary" variant="flat">
+          Delete
+        </Button>
+        <Button
+          size="sm"
+          color="primary"
+          variant="flat"
+          onClick={() =>
+            router.push(`/questions/edit-question/${question._id}`)
+          }
+        >
+          Edit
+        </Button>
+      </div>
+    </div>
+  );
+
   return (
     <div>
       <Tabs
@@ -26,9 +51,11 @@ export default function ProfileTabs({
         }}
       >
         <Tab title="Questions Asked" key="asked">
-          {askedQuestions.map((question) => (
-            <h1 key={question._id}>{question.title}</h1>
-          ))}
+          <div className="flex flex-col gap-5">
+            {askedQuestions.map((question) => (
+              <h1 key={question._id}>{getQuestion(question)}</h1>
+            ))}
+          </div>
         </Tab>
         <Tab title="Questions Answered" key="answered">
           <h1>Questions Answered</h1>
