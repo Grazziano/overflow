@@ -1,8 +1,10 @@
 'use client';
-import React from 'react';
+import React, { useState } from 'react';
 import { Tabs, Tab, Button } from '@nextui-org/react';
 import { useRouter } from 'next/navigation';
 import { IQuestion } from '@/interfaces';
+import axios from 'axios';
+import toast from 'react-hot-toast';
 
 interface ProfileTabsProps {
   askedQuestions: IQuestion[];
@@ -16,6 +18,23 @@ export default function ProfileTabs({
   savedQuestions,
 }: ProfileTabsProps) {
   const router = useRouter();
+  const [loading, setLoading] = useState<boolean>(false);
+  const [selectedQuestionToDelete, setSelectedQuestionToDelete] = useState<
+    string | null
+  >(null);
+
+  const deleteQuestion = async (id: string) => {
+    try {
+      setLoading(true);
+      await axios.delete(`/api/questions/${id}`);
+      toast.success('Question deleted successfully');
+      router.refresh();
+    } catch (error: any) {
+      toast.error(error.response.data.message || error.message);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const getQuestion = (question: IQuestion) => (
     <div className="border p-3 flex flex-col gap-2 bg-gray-50 cursor-pointer hover:border-gray-700">
@@ -25,7 +44,16 @@ export default function ProfileTabs({
       </span>
 
       <div className="flex justify-end gap-5 mt-5">
-        <Button size="sm" color="secondary" variant="flat">
+        <Button
+          size="sm"
+          color="secondary"
+          variant="flat"
+          isLoading={loading && selectedQuestionToDelete === question._id}
+          onClick={() => {
+            setSelectedQuestionToDelete(question._id);
+            deleteQuestion(question._id);
+          }}
+        >
           Delete
         </Button>
         <Button

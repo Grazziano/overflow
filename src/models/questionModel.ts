@@ -14,7 +14,7 @@ const QuestionSchema = new mongoose.Schema(
     },
     code: {
       type: String,
-      required: true,
+      required: false,
       trim: true,
     },
     tags: {

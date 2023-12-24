@@ -25,3 +25,18 @@ export async function PUT(request: NextRequest, { params }: QuestionParams) {
     return NextResponse.json({ message: error.message }, { status: 500 });
   }
 }
+
+export async function DELETE(request: NextRequest, { params }: QuestionParams) {
+  try {
+    const { userId } = auth();
+
+    if (userId === undefined) {
+      throw new Error('User not authenticated');
+    }
+
+    await QuestionModel.findByIdAndDelete(params.questionid);
+    return NextResponse.json({ message: 'Question deleted successfully' });
+  } catch (error: any) {
+    return NextResponse.json({ message: error.message }, { status: 500 });
+  }
+}
