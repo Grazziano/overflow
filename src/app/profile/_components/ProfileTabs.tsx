@@ -2,8 +2,19 @@
 import React from 'react';
 import { Tabs, Tab } from '@nextui-org/react';
 import { useRouter } from 'next/navigation';
+import { IQuestion } from '@/interfaces';
 
-export default function ProfileTabs() {
+interface ProfileTabsProps {
+  askedQuestions: IQuestion[];
+  answeredQuestions: IQuestion[];
+  savedQuestions: IQuestion[];
+}
+
+export default function ProfileTabs({
+  askedQuestions,
+  answeredQuestions,
+  savedQuestions,
+}: ProfileTabsProps) {
   const router = useRouter();
 
   return (
@@ -15,7 +26,9 @@ export default function ProfileTabs() {
         }}
       >
         <Tab title="Questions Asked" key="asked">
-          <h1>Questions Asked</h1>
+          {askedQuestions.map((question) => (
+            <h1 key={question._id}>{question.title}</h1>
+          ))}
         </Tab>
         <Tab title="Questions Answered" key="answered">
           <h1>Questions Answered</h1>
