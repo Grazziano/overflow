@@ -70,6 +70,12 @@ export default function ProfileTabs({
     </div>
   );
 
+  const getEmptyMessage = () => (
+    <div>
+      <h1 className="text-sm">No questions found</h1>
+    </div>
+  );
+
   return (
     <div>
       <Tabs
@@ -83,13 +89,23 @@ export default function ProfileTabs({
             {askedQuestions.map((question) => (
               <h1 key={question._id}>{getQuestion(question)}</h1>
             ))}
+
+            {askedQuestions.length === 0 && getEmptyMessage()}
           </div>
         </Tab>
         <Tab title="Questions Answered" key="answered">
-          <h1>Questions Answered</h1>
+          {answeredQuestions.map((question) => (
+            <h1 key={question._id}>{getQuestion(question)}</h1>
+          ))}
+
+          {answeredQuestions.length === 0 && getEmptyMessage()}
         </Tab>
         <Tab title="Questions Saved" key="saved">
-          <h1>Questions Saved</h1>
+          {savedQuestions.map((question) => (
+            <h1 key={question._id}>{getQuestion(question)}</h1>
+          ))}
+
+          {savedQuestions.length === 0 && getEmptyMessage()}
         </Tab>
       </Tabs>
     </div>
