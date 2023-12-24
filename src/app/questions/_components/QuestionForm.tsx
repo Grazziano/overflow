@@ -1,5 +1,5 @@
 'use client';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Button, Input, Switch, Textarea } from '@nextui-org/react';
 import { javascript } from '@codemirror/lang-javascript';
 import CodeMirror from '@uiw/react-codemirror';
@@ -13,7 +13,15 @@ interface QuestionInterface {
   code: string;
 }
 
-export default function QuestionForm() {
+interface QuestionFormProps {
+  inicialData?: any;
+  type?: 'edit' | 'add';
+}
+
+export default function QuestionForm({
+  inicialData = null,
+  type = 'add',
+}: QuestionFormProps) {
   const router = useRouter();
 
   const [loading, setLoading] = useState<boolean>(false);
@@ -29,15 +37,31 @@ export default function QuestionForm() {
 
     try {
       setLoading(true);
-      await axios.post('/api/questions', question);
-      toast.success('Question created successfully');
-      router.push('/');
+
+      if (type === 'add') {
+        await axios.post('/api/questions', question);
+        toast.success('Question created successfully');
+      } else {
+        await axios.put(`/api/questions/${inicialData._id}`, question);
+        toast.success('Question updated successfully');
+      }
+
+      router.refresh();
+      router.back();
     } catch (error: any) {
       toast.error(error.response.data.message || error.message);
     } finally {
       setLoading(false);
     }
   };
+
+  useEffect(() => {
+    if (type === 'edit' && inicialData) {
+      setQuestion(inicialData);
+
+      if (inicialData.code) setShowCode(true);
+    }
+  }, [inicialData]);
 
   return (
     <form className="flex flex-col gap-5" onSubmit={onsubmit}>
@@ -67,13 +91,14 @@ export default function QuestionForm() {
         placeholder="Do you want add code?"
         defaultChecked={showCode}
         onChange={() => setShowCode(!showCode)}
+        isSelected={showCode}
       >
         <span className="text-gray-600">Do you want add code?</span>
       </Switch>
 
       {showCode && (
         <CodeMirror
-          value="console.log('hello world!');"
+          value={question.code}
           height="200px"
           theme="dark"
           extensions={[javascript({ jsx: true })]}
