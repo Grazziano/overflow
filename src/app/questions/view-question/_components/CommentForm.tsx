@@ -2,6 +2,8 @@
 import React, { useState } from 'react';
 import { IAnswer } from '@/interfaces';
 import { Button, Modal, ModalContent, Textarea } from '@nextui-org/react';
+import toast from 'react-hot-toast';
+import axios from 'axios';
 
 interface CommentFormProps {
   type?: 'add' | 'edit';
@@ -21,7 +23,27 @@ export default function CommentForm({
   const [loading, setLoading] = useState<boolean>(false);
   const [text, setText] = useState<string>('');
 
-  const onSave = async () => {};
+  const onSave = async () => {
+    try {
+      setLoading(true);
+
+      if (type === 'add') {
+        await axios.post('/api/comments', {
+          answer: answer._id,
+          text,
+          question: answer.question._id,
+        });
+        toast.success('Comment added successfully');
+      }
+
+      reloadData();
+      setShowCommentForm(false);
+    } catch (error: any) {
+      toast.error(error.response.data.message || error.message);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <Modal
