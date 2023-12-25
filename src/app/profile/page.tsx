@@ -28,7 +28,7 @@ export default async function ProfilePage({ searchParams }: ProfilePageProps) {
     askedQuestions = await QuestionModel.find({
       user: mongoUserId,
     })
-      .sort({ createdAt: -1 })
+      .sort({ updatedAt: -1 })
       .populate('user');
   }
 
@@ -36,12 +36,12 @@ export default async function ProfilePage({ searchParams }: ProfilePageProps) {
     answeredQuestions = await AnswerModel.find({
       user: mongoUserId,
     })
-      .sort({ createdAt: -1 })
+      .sort({ updatedAt: -1 })
       .populate('question');
   } else if (tab === 'saved') {
   } else if (tab === 'commented') {
     commentedQuestions = await CommentModel.find({ user: mongoUserId })
-      .sort({ createdAt: -1 })
+      .sort({ updatedAt: -1 })
       .populate('question');
   }
 

@@ -25,3 +25,19 @@ export async function PUT(request: NextRequest, { params }: AnswerParams) {
     return NextResponse.json({ message: error.message }, { status: 500 });
   }
 }
+
+export async function DELETE(request: NextRequest, { params }: AnswerParams) {
+  try {
+    const { userId } = auth();
+
+    if (userId === undefined) {
+      throw new Error('User not authenticated');
+    }
+
+    await CommentModel.findByIdAndDelete(params.commentid);
+
+    return NextResponse.json({ message: 'Comment deleted successfully' });
+  } catch (error: any) {
+    return NextResponse.json({ message: error.message }, { status: 500 });
+  }
+}

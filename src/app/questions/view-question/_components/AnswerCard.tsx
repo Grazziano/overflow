@@ -21,6 +21,8 @@ export default function AnswerCard({ answer, mongoUserId }: AnswerCardProps) {
   const [showCommentForm, setShowCommentForm] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
   const [loadingForDelete, setLoadingForDelete] = useState<boolean>(false);
+  const [loadingForDeletingComment, setLoadingForDeletingComment] =
+    useState<boolean>(false);
   const [showComments, setShowComments] = useState<boolean>(false);
   const [comments, setComments] = useState<any>([]);
   const router = useRouter();
@@ -54,13 +56,26 @@ export default function AnswerCard({ answer, mongoUserId }: AnswerCardProps) {
     }
   };
 
+  const deleteComment = async (id: string) => {
+    try {
+      setLoadingForDeletingComment(true);
+      await axios.delete(`/api/comments/${id}`);
+      toast.success('Comment deleted successfully');
+      getComments();
+    } catch (error: any) {
+      toast.error(error.response.data.message || error.message);
+    } finally {
+      setLoadingForDeletingComment(false);
+    }
+  };
+
   return (
     <div className="border bg-gray-100 p-3 flex flex-col gap-2 border-gray-500">
       <div className="flex gap-10 text-xs">
         <span>
           Answered On{' '}
           <span className="text-secondary">
-            {dateTimeFormat(answer.createdAt)}
+            {dateTimeFormat(answer.updatedAt)}
           </span>
         </span>
 
@@ -150,11 +165,17 @@ export default function AnswerCard({ answer, mongoUserId }: AnswerCardProps) {
                   {comment.user._id === mongoUserId && (
                     <>
                       <Button
-                        onClick={() => {}}
+                        onClick={() => {
+                          setSelectedComment(comment);
+                          deleteComment(comment._id);
+                        }}
                         size="sm"
                         color="primary"
                         variant="flat"
-                        isLoading={loadingForDelete}
+                        isLoading={
+                          loadingForDeletingComment &&
+                          selectedComment?._id === comment._id
+                        }
                       >
                         Delete
                       </Button>

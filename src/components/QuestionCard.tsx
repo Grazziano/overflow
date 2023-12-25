@@ -32,7 +32,7 @@ export default function QuestionCard({ question }: QuestionCardProps) {
           <span>
             Asked on{' '}
             <span className="text-secondary">
-              {dateTimeFormat(question.createdAt)}
+              {dateTimeFormat(question.updatedAt)}
             </span>
           </span>
 

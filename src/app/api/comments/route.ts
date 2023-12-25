@@ -22,7 +22,9 @@ export async function GET(request: NextRequest) {
   try {
     const searchParams = request.nextUrl.searchParams;
     const answer = searchParams.get('answer');
-    const comments = await CommentModel.find({ answer }).populate('user');
+    const comments = await CommentModel.find({ answer })
+      .populate('user')
+      .sort({ updatedAt: -1 });
     return NextResponse.json({ comments });
   } catch (error: any) {
     return NextResponse.json({ message: error.message }, { status: 500 });

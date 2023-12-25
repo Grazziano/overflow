@@ -21,7 +21,7 @@ export default async function AnswersList({ question }: AnswersListProps) {
   const answers = await AnswerModel.find({ question: question._id })
     .populate('user')
     .populate('question')
-    .sort({ createdAt: -1 });
+    .sort({ updatedAt: -1 });
 
   return (
     <div className="flex flex-col gap-5">

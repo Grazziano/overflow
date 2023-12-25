@@ -15,7 +15,7 @@ export default async function Home() {
   const user: User | null = await currentUser();
 
   const questions: IQuestion[] = await QuestionModel.find()
-    .sort({ createdAt: -1 })
+    .sort({ updatedAt: -1 })
     .populate('user');
 
   return (
