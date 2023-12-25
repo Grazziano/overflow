@@ -6,6 +6,7 @@ import ViewCode from '@/components/ViewCode';
 import { Button } from '@nextui-org/react';
 import CommentForm from './CommentForm';
 import axios from 'axios';
+import AnswerForm from './AnswerForm';
 
 interface AnswerCardProps {
   answer: IAnswer;
@@ -13,6 +14,8 @@ interface AnswerCardProps {
 }
 
 export default function AnswerCard({ answer, mongoUserId }: AnswerCardProps) {
+  const [selectedAnswer, setSelectedAnswer] = useState<any>(null);
+  const [showAnswerForm, setShowAnswerForm] = useState<boolean>(false);
   const [showCommentForm, setShowCommentForm] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
   const [showComments, setShowComments] = useState<boolean>(false);
@@ -75,7 +78,15 @@ export default function AnswerCard({ answer, mongoUserId }: AnswerCardProps) {
 
         <div className="flex gap-5">
           {mongoUserId === answer.user._id && (
-            <Button onClick={() => {}} size="sm" color="primary" variant="flat">
+            <Button
+              onClick={() => {
+                setSelectedAnswer(answer);
+                setShowAnswerForm(true);
+              }}
+              size="sm"
+              color="primary"
+              variant="flat"
+            >
               Edit Answer
             </Button>
           )}
@@ -123,6 +134,16 @@ export default function AnswerCard({ answer, mongoUserId }: AnswerCardProps) {
           showCommentForm={showCommentForm}
           setShowCommentForm={setShowCommentForm}
           reloadData={() => {}}
+        />
+      )}
+
+      {showAnswerForm && (
+        <AnswerForm
+          showAnswerForm={showAnswerForm}
+          setShowAnswerForm={setShowAnswerForm}
+          questionId={answer.question._id.toString()}
+          initialData={selectedAnswer}
+          type="edit"
         />
       )}
     </div>

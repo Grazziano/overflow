@@ -1,5 +1,5 @@
 'use client';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   Button,
   Modal,
@@ -18,6 +18,7 @@ interface AnswerFormProps {
   setShowAnswerForm: React.Dispatch<React.SetStateAction<boolean>>;
   type?: 'edit' | 'add';
   questionId: string;
+  initialData?: any;
 }
 
 interface AnswerInterface {
@@ -31,6 +32,7 @@ export default function AnswerForm({
   setShowAnswerForm,
   type = 'add',
   questionId = '',
+  initialData,
 }: AnswerFormProps) {
   const [loading, setLoading] = useState<boolean>(false);
   const [showCode, setShowCode] = useState<boolean>(false);
@@ -45,10 +47,17 @@ export default function AnswerForm({
     try {
       setLoading(true);
 
+      if (!showCode) {
+        answer.code = '';
+      }
+
       if (type === 'add') {
         answer.question = questionId;
         await axios.post('/api/answers', answer);
         toast.success('Answer saved successfully');
+      } else {
+        await axios.put(`/api/answers/${initialData._id}`, answer);
+        toast.success('Answer updated successfully');
       }
 
       router.refresh();
@@ -60,6 +69,15 @@ export default function AnswerForm({
     }
   };
 
+  useEffect(() => {
+    if (type === 'edit') {
+      setAnswer(initialData);
+    }
+    if (initialData.code) {
+      setShowCode(true);
+    }
+  }, [initialData, type]);
+
   return (
     <Modal
       isOpen={showAnswerForm}
@@ -68,7 +86,9 @@ export default function AnswerForm({
     >
       <ModalContent>
         <div className="p-5">
-          <h1 className="text-primary text-xl">Write an Answer</h1>
+          <h1 className="text-primary text-xl">
+            {type === 'add' ? 'Add' : 'Edit'} Answer
+          </h1>
 
           <Textarea
             placeholder="Description"
