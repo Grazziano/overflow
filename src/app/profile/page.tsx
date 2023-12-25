@@ -5,6 +5,7 @@ import { currentUser } from '@clerk/nextjs/server';
 import { getMongoDbUserIdFromClerkUserId } from '@/actions/users';
 import { IQuestion } from '@/interfaces';
 import AnswerModel from '@/models/answerModel';
+import CommentModel from '@/models/commentModel';
 
 interface ProfilePageProps {
   searchParams: any;
@@ -19,6 +20,7 @@ export default async function ProfilePage({ searchParams }: ProfilePageProps) {
   let askedQuestions: IQuestion[] = [];
   let answeredQuestions: IQuestion[] = [];
   let savedQuestions: IQuestion[] = [];
+  let commentedQuestions: IQuestion[] = [];
 
   const tab = searchParams.tab || 'asked';
 
@@ -36,6 +38,11 @@ export default async function ProfilePage({ searchParams }: ProfilePageProps) {
     })
       .sort({ createdAt: -1 })
       .populate('question');
+  } else if (tab === 'saved') {
+  } else if (tab === 'commented') {
+    commentedQuestions = await CommentModel.find({ user: mongoUserId })
+      .sort({ createdAt: -1 })
+      .populate('question');
   }
 
   return (
@@ -48,6 +55,11 @@ export default async function ProfilePage({ searchParams }: ProfilePageProps) {
           )
         )}
         savedQuestions={JSON.parse(JSON.stringify(savedQuestions))}
+        commentedQuestions={JSON.parse(
+          JSON.stringify(
+            commentedQuestions.map((comment: any) => comment.question)
+          )
+        )}
         mongoUserId={mongoUserId.toString()}
       />
     </div>

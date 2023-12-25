@@ -10,6 +10,7 @@ interface ProfileTabsProps {
   askedQuestions: IQuestion[];
   answeredQuestions: IQuestion[];
   savedQuestions: IQuestion[];
+  commentedQuestions: IQuestion[];
   mongoUserId: string;
 }
 
@@ -18,6 +19,7 @@ export default function ProfileTabs({
   answeredQuestions,
   savedQuestions,
   mongoUserId,
+  commentedQuestions,
 }: ProfileTabsProps) {
   const router = useRouter();
   const [loading, setLoading] = useState<boolean>(false);
@@ -126,6 +128,15 @@ export default function ProfileTabs({
           </div>
 
           {savedQuestions.length === 0 && getEmptyMessage()}
+        </Tab>
+        <Tab title="Questions Commented" key="commented">
+          <div className="flex flex-col gap-5">
+            {commentedQuestions.map((question) => (
+              <div key={question._id}>{getQuestion(question)}</div>
+            ))}
+          </div>
+
+          {answeredQuestions.length === 0 && getEmptyMessage()}
         </Tab>
       </Tabs>
     </div>

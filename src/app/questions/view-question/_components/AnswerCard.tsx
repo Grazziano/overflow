@@ -24,6 +24,8 @@ export default function AnswerCard({ answer, mongoUserId }: AnswerCardProps) {
   const [showComments, setShowComments] = useState<boolean>(false);
   const [comments, setComments] = useState<any>([]);
   const router = useRouter();
+  const [selectedComment, setSelectedComment] = useState<any>(null);
+  const [commentFormType, setCommentFormType] = useState<'add' | 'edit'>('add');
 
   const getComments = async () => {
     try {
@@ -143,17 +145,48 @@ export default function AnswerCard({ answer, mongoUserId }: AnswerCardProps) {
             >
               <p className="text-sm text-gray-600">{comment.text}</p>
 
-              <div className="flex justify-end gap-10 text-xs">
-                <span>
-                  Comment On{' '}
-                  <span className="text-secondary">
-                    {dateTimeFormat(comment.createdAt)}
-                  </span>
-                </span>
+              <div className="flex justify-between mt-5 items-center">
+                <div className="flex gap-5">
+                  {comment.user._id === mongoUserId && (
+                    <>
+                      <Button
+                        onClick={() => {}}
+                        size="sm"
+                        color="primary"
+                        variant="flat"
+                        isLoading={loadingForDelete}
+                      >
+                        Delete
+                      </Button>
+                      <Button
+                        onClick={() => {
+                          setCommentFormType('edit');
+                          setSelectedComment(comment);
+                          setShowCommentForm(true);
+                        }}
+                        size="sm"
+                        color="primary"
+                        variant="flat"
+                      >
+                        Edit
+                      </Button>
+                    </>
+                  )}
+                </div>
 
-                <span>
-                  By <span className="text-secondary">{comment.user.name}</span>
-                </span>
+                <div className="flex gap-10 text-xs">
+                  <span>
+                    Comment On{' '}
+                    <span className="text-secondary">
+                      {dateTimeFormat(comment.createdAt)}
+                    </span>
+                  </span>
+
+                  <span>
+                    By{' '}
+                    <span className="text-secondary">{comment.user.name}</span>
+                  </span>
+                </div>
               </div>
             </div>
           ))}
@@ -165,7 +198,9 @@ export default function AnswerCard({ answer, mongoUserId }: AnswerCardProps) {
           answer={answer}
           showCommentForm={showCommentForm}
           setShowCommentForm={setShowCommentForm}
-          reloadData={() => {}}
+          reloadData={getComments}
+          initialData={selectedComment}
+          type={commentFormType}
         />
       )}
 

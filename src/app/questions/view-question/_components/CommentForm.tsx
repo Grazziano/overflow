@@ -1,5 +1,5 @@
 'use client';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { IAnswer } from '@/interfaces';
 import { Button, Modal, ModalContent, Textarea } from '@nextui-org/react';
 import toast from 'react-hot-toast';
@@ -10,7 +10,8 @@ interface CommentFormProps {
   answer: IAnswer;
   showCommentForm: boolean;
   setShowCommentForm: (show: boolean) => void;
-  reloadData: (answer: IAnswer) => void;
+  reloadData: () => void;
+  initialData?: any;
 }
 
 export default function CommentForm({
@@ -19,6 +20,7 @@ export default function CommentForm({
   showCommentForm,
   setShowCommentForm,
   reloadData,
+  initialData = null,
 }: CommentFormProps) {
   const [loading, setLoading] = useState<boolean>(false);
   const [text, setText] = useState<string>('');
@@ -34,6 +36,11 @@ export default function CommentForm({
           question: answer.question._id,
         });
         toast.success('Comment added successfully');
+      } else {
+        await axios.put(`/api/comments/${initialData._id}`, {
+          text,
+        });
+        toast.success('Comment updated successfully');
       }
 
       reloadData();
@@ -44,6 +51,12 @@ export default function CommentForm({
       setLoading(false);
     }
   };
+
+  useEffect(() => {
+    if (type === 'edit') {
+      setText(initialData.text);
+    }
+  }, [initialData, type]);
 
   return (
     <Modal
