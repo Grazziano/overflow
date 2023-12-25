@@ -72,9 +72,10 @@ export default function AnswerForm({
   useEffect(() => {
     if (type === 'edit') {
       setAnswer(initialData);
-    }
-    if (initialData.code) {
-      setShowCode(true);
+
+      if (initialData.code) {
+        setShowCode(true);
+      }
     }
   }, [initialData, type]);
 

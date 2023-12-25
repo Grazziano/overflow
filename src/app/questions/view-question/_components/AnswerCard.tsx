@@ -7,6 +7,8 @@ import { Button } from '@nextui-org/react';
 import CommentForm from './CommentForm';
 import axios from 'axios';
 import AnswerForm from './AnswerForm';
+import toast from 'react-hot-toast';
+import { useRouter } from 'next/navigation';
 
 interface AnswerCardProps {
   answer: IAnswer;
@@ -18,8 +20,10 @@ export default function AnswerCard({ answer, mongoUserId }: AnswerCardProps) {
   const [showAnswerForm, setShowAnswerForm] = useState<boolean>(false);
   const [showCommentForm, setShowCommentForm] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
+  const [loadingForDelete, setLoadingForDelete] = useState<boolean>(false);
   const [showComments, setShowComments] = useState<boolean>(false);
   const [comments, setComments] = useState<any>([]);
+  const router = useRouter();
 
   const getComments = async () => {
     try {
@@ -30,6 +34,21 @@ export default function AnswerCard({ answer, mongoUserId }: AnswerCardProps) {
       setComments([]);
     } finally {
       setLoading(false);
+    }
+  };
+
+  const deleteAnswer = async () => {
+    try {
+      setLoadingForDelete(true);
+      await axios.delete(
+        `/api/answers/${answer._id}?question=${answer.question._id}`
+      );
+      toast.success('Answer deleted successfully');
+      router.refresh();
+    } catch (error: any) {
+      toast.error(error.response.data.message || error.message);
+    } finally {
+      setLoadingForDelete(false);
     }
   };
 
@@ -78,17 +97,30 @@ export default function AnswerCard({ answer, mongoUserId }: AnswerCardProps) {
 
         <div className="flex gap-5">
           {mongoUserId === answer.user._id && (
-            <Button
-              onClick={() => {
-                setSelectedAnswer(answer);
-                setShowAnswerForm(true);
-              }}
-              size="sm"
-              color="primary"
-              variant="flat"
-            >
-              Edit Answer
-            </Button>
+            <>
+              <Button
+                onClick={() => {
+                  deleteAnswer();
+                }}
+                size="sm"
+                color="primary"
+                variant="flat"
+                isLoading={loadingForDelete}
+              >
+                Delete
+              </Button>
+              <Button
+                onClick={() => {
+                  setSelectedAnswer(answer);
+                  setShowAnswerForm(true);
+                }}
+                size="sm"
+                color="primary"
+                variant="flat"
+              >
+                Edit
+              </Button>
+            </>
           )}
 
           <Button
