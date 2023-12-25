@@ -9,28 +9,56 @@ import {
 } from '@nextui-org/react';
 import { javascript } from '@codemirror/lang-javascript';
 import CodeMirror from '@uiw/react-codemirror';
+import axios from 'axios';
+import toast from 'react-hot-toast';
+import { useRouter } from 'next/navigation';
 
 interface AnswerFormProps {
   showAnswerForm: boolean;
   setShowAnswerForm: React.Dispatch<React.SetStateAction<boolean>>;
+  type?: 'edit' | 'add';
+  questionId: string;
 }
 
 interface AnswerInterface {
   description: string;
   code: string;
+  question: string;
 }
 
 export default function AnswerForm({
   showAnswerForm,
   setShowAnswerForm,
+  type = 'add',
+  questionId = '',
 }: AnswerFormProps) {
+  const [loading, setLoading] = useState<boolean>(false);
   const [showCode, setShowCode] = useState<boolean>(false);
   const [answer, setAnswer] = useState<AnswerInterface>({
     description: '',
     code: '',
+    question: '',
   });
+  const router = useRouter();
 
-  const onSave = () => {};
+  const onSave = async () => {
+    try {
+      setLoading(true);
+
+      if (type === 'add') {
+        answer.question = questionId;
+        await axios.post('/api/answers', answer);
+        toast.success('Answer saved successfully');
+      }
+
+      router.refresh();
+      setShowAnswerForm(false);
+    } catch (error: any) {
+      toast.error(error.response.data.message || error.message);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <Modal
@@ -57,24 +85,29 @@ export default function AnswerForm({
             defaultChecked={showCode}
             onChange={() => setShowCode(!showCode)}
             isSelected={showCode}
+            className="py-5"
           >
             <span className="text-gray-600">Do you want add code?</span>
           </Switch>
 
-          <CodeMirror
-            value={answer.code}
-            height="200px"
-            theme="dark"
-            extensions={[javascript({ jsx: true })]}
-            onChange={(value) => {
-              setAnswer({ ...answer, code: value });
-            }}
-            defaultValue={answer.code}
-          />
+          {showCode && (
+            <CodeMirror
+              value={answer.code}
+              height="200px"
+              theme="dark"
+              extensions={[javascript({ jsx: true })]}
+              onChange={(value) => {
+                setAnswer({ ...answer, code: value });
+              }}
+              defaultValue={answer.code}
+            />
+          )}
 
           <div className="flex justify-end gap-5 mt-5">
             <Button onClick={() => setShowAnswerForm(false)}>Cancel</Button>
-            <Button color="primary">Save</Button>
+            <Button color="primary" isLoading={loading} onClick={onSave}>
+              Save
+            </Button>
           </div>
         </div>
       </ModalContent>

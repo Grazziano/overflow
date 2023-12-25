@@ -36,6 +36,7 @@ export default function QuestionInfoFooter({
         <AnswerForm
           showAnswerForm={showNewAnswerModal}
           setShowAnswerForm={setShowNewAnswerModal}
+          questionId={question._id.toString()}
         />
       )}
     </div>

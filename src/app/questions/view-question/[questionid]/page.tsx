@@ -6,6 +6,9 @@ import ViewCode from '@/components/ViewCode';
 import QuestionInfoFooter from '../_components/QuestionInfoFooter';
 import { currentUser } from '@clerk/nextjs';
 import { getMongoDbUserIdFromClerkUserId } from '@/actions/users';
+import { connectDB } from '@/config/db';
+
+connectDB();
 
 interface ViewQuestionProps {
   params: {

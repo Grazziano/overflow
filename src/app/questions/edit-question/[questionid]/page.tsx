@@ -2,6 +2,9 @@ import React from 'react';
 import QuestionForm from '../../_components/QuestionForm';
 import QuestionModel from '@/models/questionModel';
 import { IQuestion } from '@/interfaces';
+import { connectDB } from '@/config/db';
+
+connectDB();
 
 interface EditQuestionProps {
   params: {

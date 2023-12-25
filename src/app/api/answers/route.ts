@@ -1,6 +1,7 @@
 import { getMongoDbUserIdFromClerkUserId } from '@/actions/users';
 import { connectDB } from '@/config/db';
 import AnswerModel from '@/models/answerModel';
+import QuestionModel from '@/models/questionModel';
 import { auth } from '@clerk/nextjs/server';
 import { NextRequest, NextResponse } from 'next/server';
 
@@ -13,6 +14,11 @@ export async function POST(request: NextRequest) {
     reqBody.user = await getMongoDbUserIdFromClerkUserId(userId!);
 
     await AnswerModel.create(reqBody);
+
+    // increment totalAnswer count in question
+    const question: any = await QuestionModel.findById(reqBody.question);
+    question.totalAnswers++;
+    await question.save();
 
     return NextResponse.json({ message: 'Answer posted successfully' });
   } catch (error: any) {
