@@ -4,6 +4,7 @@ import QuestionModel from '@/models/questionModel';
 import { currentUser } from '@clerk/nextjs/server';
 import { getMongoDbUserIdFromClerkUserId } from '@/actions/users';
 import { IQuestion } from '@/interfaces';
+import AnswerModel from '@/models/answerModel';
 
 interface ProfilePageProps {
   searchParams: any;
@@ -29,12 +30,25 @@ export default async function ProfilePage({ searchParams }: ProfilePageProps) {
       .populate('user');
   }
 
+  if (tab === 'answered') {
+    answeredQuestions = await AnswerModel.find({
+      user: mongoUserId,
+    })
+      .sort({ createdAt: -1 })
+      .populate('question');
+  }
+
   return (
     <div>
       <ProfileTabs
         askedQuestions={JSON.parse(JSON.stringify(askedQuestions))}
-        answeredQuestions={JSON.parse(JSON.stringify(answeredQuestions))}
+        answeredQuestions={JSON.parse(
+          JSON.stringify(
+            answeredQuestions.map((answer: any) => answer.question)
+          )
+        )}
         savedQuestions={JSON.parse(JSON.stringify(savedQuestions))}
+        mongoUserId={mongoUserId.toString()}
       />
     </div>
   );

@@ -9,9 +9,10 @@ import axios from 'axios';
 
 interface AnswerCardProps {
   answer: IAnswer;
+  mongoUserId: string;
 }
 
-export default function AnswerCard({ answer }: AnswerCardProps) {
+export default function AnswerCard({ answer, mongoUserId }: AnswerCardProps) {
   const [showCommentForm, setShowCommentForm] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
   const [showComments, setShowComments] = useState<boolean>(false);
@@ -71,14 +72,23 @@ export default function AnswerCard({ answer }: AnswerCardProps) {
             Hide Comments
           </Button>
         )}
-        <Button
-          onClick={() => setShowCommentForm(true)}
-          size="sm"
-          color="primary"
-          variant="flat"
-        >
-          Add Comment
-        </Button>
+
+        <div className="flex gap-5">
+          {mongoUserId === answer.user._id && (
+            <Button onClick={() => {}} size="sm" color="primary" variant="flat">
+              Edit Answer
+            </Button>
+          )}
+
+          <Button
+            onClick={() => setShowCommentForm(true)}
+            size="sm"
+            color="primary"
+            variant="flat"
+          >
+            Add Comment
+          </Button>
+        </div>
       </div>
 
       {comments.length > 0 && showComments && (

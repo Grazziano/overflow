@@ -10,12 +10,14 @@ interface ProfileTabsProps {
   askedQuestions: IQuestion[];
   answeredQuestions: IQuestion[];
   savedQuestions: IQuestion[];
+  mongoUserId: string;
 }
 
 export default function ProfileTabs({
   askedQuestions,
   answeredQuestions,
   savedQuestions,
+  mongoUserId,
 }: ProfileTabsProps) {
   const router = useRouter();
   const [loading, setLoading] = useState<boolean>(false);
@@ -46,26 +48,40 @@ export default function ProfileTabs({
       <div className="flex justify-end gap-5 mt-5">
         <Button
           size="sm"
-          color="secondary"
           variant="flat"
-          isLoading={loading && selectedQuestionToDelete === question._id}
           onClick={() => {
-            setSelectedQuestionToDelete(question._id);
-            deleteQuestion(question._id);
+            router.push(`/questions/view-question/${question._id}`);
           }}
         >
-          Delete
+          View
         </Button>
-        <Button
-          size="sm"
-          color="primary"
-          variant="flat"
-          onClick={() =>
-            router.push(`/questions/edit-question/${question._id}`)
-          }
-        >
-          Edit
-        </Button>
+
+        {question.user._id === mongoUserId && (
+          <>
+            <Button
+              size="sm"
+              color="secondary"
+              variant="flat"
+              isLoading={loading && selectedQuestionToDelete === question._id}
+              onClick={() => {
+                setSelectedQuestionToDelete(question._id);
+                deleteQuestion(question._id);
+              }}
+            >
+              Delete
+            </Button>
+            <Button
+              size="sm"
+              color="primary"
+              variant="flat"
+              onClick={() =>
+                router.push(`/questions/edit-question/${question._id}`)
+              }
+            >
+              Edit
+            </Button>
+          </>
+        )}
       </div>
     </div>
   );
@@ -87,23 +103,27 @@ export default function ProfileTabs({
         <Tab title="Questions Asked" key="asked">
           <div className="flex flex-col gap-5">
             {askedQuestions.map((question) => (
-              <h1 key={question._id}>{getQuestion(question)}</h1>
+              <div key={question._id}>{getQuestion(question)}</div>
             ))}
 
             {askedQuestions.length === 0 && getEmptyMessage()}
           </div>
         </Tab>
         <Tab title="Questions Answered" key="answered">
-          {answeredQuestions.map((question) => (
-            <h1 key={question._id}>{getQuestion(question)}</h1>
-          ))}
+          <div className="flex flex-col gap-5">
+            {answeredQuestions.map((question) => (
+              <div key={question._id}>{getQuestion(question)}</div>
+            ))}
+          </div>
 
           {answeredQuestions.length === 0 && getEmptyMessage()}
         </Tab>
         <Tab title="Questions Saved" key="saved">
-          {savedQuestions.map((question) => (
-            <h1 key={question._id}>{getQuestion(question)}</h1>
-          ))}
+          <div className="flex flex-col gap-5">
+            {savedQuestions.map((question) => (
+              <div key={question._id}>{getQuestion(question)}</div>
+            ))}
+          </div>
 
           {savedQuestions.length === 0 && getEmptyMessage()}
         </Tab>
