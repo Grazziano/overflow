@@ -17,3 +17,13 @@ export interface IUser {
   profilePicUrl: string;
   crerkUserId: string;
 }
+
+export interface IAnswer {
+  _id: string;
+  description: string;
+  code: string;
+  createdAt: string;
+  updatedAt: string;
+  user: IUser;
+  question: IQuestion;
+}

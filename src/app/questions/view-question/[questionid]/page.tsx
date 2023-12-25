@@ -7,6 +7,7 @@ import QuestionInfoFooter from '../_components/QuestionInfoFooter';
 import { currentUser } from '@clerk/nextjs';
 import { getMongoDbUserIdFromClerkUserId } from '@/actions/users';
 import { connectDB } from '@/config/db';
+import AnswersList from '../_components/AnswersList';
 
 connectDB();
 
@@ -55,6 +56,10 @@ export default async function ViewQuestion({ params }: ViewQuestionProps) {
           question={JSON.parse(JSON.stringify(question))}
           mongoDbUserId={mongoDbUserId.toString()}
         />
+
+        {question.totalAnswers > 0 && (
+          <AnswersList question={JSON.parse(JSON.stringify(question))} />
+        )}
       </div>
     </div>
   );
