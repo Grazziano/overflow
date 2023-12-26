@@ -1,6 +1,6 @@
 'use client';
 import React, { useEffect, useState } from 'react';
-import { Button, Input, Switch, Textarea } from '@nextui-org/react';
+import { Button, Chip, Input, Switch, Textarea } from '@nextui-org/react';
 import { javascript } from '@codemirror/lang-javascript';
 import CodeMirror from '@uiw/react-codemirror';
 import axios from 'axios';
@@ -11,6 +11,7 @@ interface QuestionInterface {
   title: string;
   description: string;
   code: string;
+  tags: string[];
 }
 
 interface QuestionFormProps {
@@ -26,10 +27,12 @@ export default function QuestionForm({
 
   const [loading, setLoading] = useState<boolean>(false);
   const [showCode, setShowCode] = useState<boolean>(false);
+  const [newTag, setNewTag] = useState<string>('');
   const [question, setQuestion] = useState<QuestionInterface>({
     title: '',
     description: '',
     code: '',
+    tags: [],
   });
 
   const onsubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -63,6 +66,13 @@ export default function QuestionForm({
     }
   }, [inicialData]);
 
+  // const onKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
+  //   if (event.key === 'Enter') {
+  //     setQuestion({ ...question, tags: [...question.tags, newTag] });
+  //     setNewTag('');
+  //   }
+  // };
+
   return (
     <form className="flex flex-col gap-5" onSubmit={onsubmit}>
       <Input
@@ -86,6 +96,44 @@ export default function QuestionForm({
         }
         labelPlacement="outside"
       />
+
+      <div className="flex gap-5 items-end md:w-1/2">
+        <Input
+          placeholder="Enter new tag"
+          label="Tags"
+          value={newTag}
+          onChange={(e) => setNewTag(e.target.value)}
+          labelPlacement="outside"
+          // onKeyDown={(event) => onKeyDown(event)}
+        />
+
+        <Button
+          onClick={() => {
+            setQuestion({ ...question, tags: [...question.tags, newTag] });
+            setNewTag('');
+          }}
+          size="sm"
+        >
+          Add Tag
+        </Button>
+      </div>
+
+      <div className="flex gap-5">
+        {question.tags.map((tag: string, index: number) => (
+          <Chip
+            key={index}
+            color="primary"
+            onClose={() => {
+              setQuestion({
+                ...question,
+                tags: question.tags.filter((t: any) => t !== tag),
+              });
+            }}
+          >
+            {tag}
+          </Chip>
+        ))}
+      </div>
 
       <Switch
         placeholder="Do you want add code?"

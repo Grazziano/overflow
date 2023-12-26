@@ -8,6 +8,7 @@ import { currentUser } from '@clerk/nextjs';
 import { getMongoDbUserIdFromClerkUserId } from '@/actions/users';
 import { connectDB } from '@/config/db';
 import AnswersList from '../_components/AnswersList';
+import Link from 'next/link';
 
 connectDB();
 
@@ -45,6 +46,18 @@ export default async function ViewQuestion({ params }: ViewQuestionProps) {
             <span className="text-secondary">{question.user.name}</span>
           </span>
         </div>
+      </div>
+
+      <div className="flex gap-5 mt-5">
+        {question.tags.map((tag: string, index: number) => (
+          <Link
+            href={`/?tag=${tag}`}
+            key={index}
+            className="bg-gray-100 p-2 rounded-md text-sm text-gray-600 capitalize underline cursor-pointer"
+          >
+            {tag}
+          </Link>
+        ))}
       </div>
 
       <div className="flex flex-col gap-5 mt-7">
