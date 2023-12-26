@@ -21,14 +21,14 @@ export default function QuestionCard({ question }: QuestionCardProps) {
         {question.description}
       </p>
 
-      <div className="flex justify-between mt-5 items-center">
+      <div className="flex flex-col md:flex-row md:justify-between mt-5 md:items-center">
         <div>
           <span className="text-secondary text-xs">
             {question.totalAnswers > 0 ? question.totalAnswers : 'No'} answers
           </span>
         </div>
 
-        <div className="flex gap-10 text-xs">
+        <div className="flex gap-10 text-xs flex-wrap">
           <span>
             Asked on{' '}
             <span className="text-secondary">

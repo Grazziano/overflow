@@ -31,9 +31,9 @@ export default async function ViewQuestion({ params }: ViewQuestionProps) {
   return (
     <div>
       <div className="bg-gray-100 p-3">
-        <h1 className="text-primary text-xl">{question.title}</h1>
+        <h1 className="text-primary text-lg md:text-xl">{question.title}</h1>
 
-        <div className="flex gap-10 text-xs mt-2">
+        <div className="flex gap-5 md:gap-10 text-xs mt-2">
           <span>
             Asked on{' '}
             <span className="text-secondary">

@@ -160,8 +160,8 @@ export default function AnswerCard({ answer, mongoUserId }: AnswerCardProps) {
             >
               <p className="text-sm text-gray-600">{comment.text}</p>
 
-              <div className="flex justify-between mt-5 items-center">
-                <div className="flex gap-5">
+              <div className="flex justify-between mt-5 items-center flex-wrap gap-5">
+                <div className="flex gap-5 flex-wrap">
                   {comment.user._id === mongoUserId && (
                     <>
                       <Button

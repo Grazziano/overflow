@@ -101,6 +101,7 @@ export default function ProfileTabs({
         onSelectionChange={(key) => {
           router.push(`/profile?tab=${key}`);
         }}
+        className="w-full overflow-x-scroll"
       >
         <Tab title="Questions Asked" key="asked">
           <div className="flex flex-col gap-5">

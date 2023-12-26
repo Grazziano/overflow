@@ -159,7 +159,7 @@ export default function QuestionForm({
       )}
 
       <div className="flex justify-end gap-5">
-        <Button>Cancel</Button>
+        <Button onClick={() => router.back()}>Cancel</Button>
         <Button color="primary" type="submit" isLoading={loading}>
           Save
         </Button>
