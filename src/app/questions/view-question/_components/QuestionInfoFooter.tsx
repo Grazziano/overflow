@@ -35,6 +35,23 @@ export default function QuestionInfoFooter({
     }
   };
 
+  const onRemoveFromSaved = async () => {
+    try {
+      setLoading(true);
+      const payload: IQuestion = question;
+      payload.savedBy = payload.savedBy.filter(
+        (savedBy) => savedBy !== mongoDbUserId
+      );
+      await axios.put(`/api/questions/${question._id}`, payload);
+      toast.success('Question removed successfully from your profile');
+      router.refresh();
+    } catch (error: any) {
+      toast.error('Error saving question to your profile');
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <div>
       <div className="flex justify-between items-center">
@@ -43,15 +60,28 @@ export default function QuestionInfoFooter({
         </span>
 
         <div className="flex gap-5">
-          <Button
-            size="sm"
-            color="secondary"
-            onClick={() => onSave()}
-            isLoading={loading}
-            isDisabled={question.savedBy.includes(mongoDbUserId)}
-          >
-            {question.savedBy.includes(mongoDbUserId) ? 'Saved' : 'Save'}
-          </Button>
+          {question.savedBy.includes(mongoDbUserId) && (
+            <Button
+              size="sm"
+              color="secondary"
+              onClick={() => onRemoveFromSaved()}
+              isLoading={loading}
+            >
+              Remove from saved
+            </Button>
+          )}
+
+          {!question.savedBy.includes(mongoDbUserId) && (
+            <Button
+              size="sm"
+              color="secondary"
+              onClick={() => onSave()}
+              isLoading={loading}
+            >
+              Save
+            </Button>
+          )}
+
           <Button
             size="sm"
             color="secondary"

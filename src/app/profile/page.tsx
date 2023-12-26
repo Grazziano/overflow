@@ -39,6 +39,11 @@ export default async function ProfilePage({ searchParams }: ProfilePageProps) {
       .sort({ updatedAt: -1 })
       .populate('question');
   } else if (tab === 'saved') {
+    savedQuestions = await QuestionModel.find({
+      savedBy: {
+        $in: [mongoUserId],
+      },
+    });
   } else if (tab === 'commented') {
     commentedQuestions = await CommentModel.find({ user: mongoUserId })
       .sort({ updatedAt: -1 })
