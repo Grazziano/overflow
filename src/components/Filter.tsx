@@ -10,9 +10,11 @@ export default function Filter() {
   const tag = searchParams.get('tag');
 
   useEffect(() => {
-    setTimeout(() => {
-      router.push(`/?search=${search}`);
-    }, 300);
+    if (search) {
+      setTimeout(() => {
+        router.push(`/?search=${search}`);
+      }, 300);
+    }
   }, [search]);
 
   return (
