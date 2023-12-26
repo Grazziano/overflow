@@ -11,12 +11,13 @@ connectDB();
 interface HomeProps {
   searchParams: {
     tag: string;
+    search: string;
   };
 }
 
 export default async function Home({ searchParams }: HomeProps) {
   await handleNewUserRegistration();
-  const { tag } = searchParams;
+  const { tag, search } = searchParams;
 
   let filtersObject = {};
 
@@ -24,6 +25,15 @@ export default async function Home({ searchParams }: HomeProps) {
     filtersObject = {
       tags: {
         $in: [tag],
+      },
+    };
+  }
+
+  if (search) {
+    filtersObject = {
+      title: {
+        $regex: search,
+        $options: 'i',
       },
     };
   }

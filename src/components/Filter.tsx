@@ -1,5 +1,5 @@
 'use client';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Chip, Input } from '@nextui-org/react';
 import { useSearchParams, useRouter } from 'next/navigation';
 
@@ -8,6 +8,12 @@ export default function Filter() {
   const router = useRouter();
   const [search, setSearch] = useState<string>('');
   const tag = searchParams.get('tag');
+
+  useEffect(() => {
+    setTimeout(() => {
+      router.push(`/?search=${search}`);
+    }, 300);
+  }, [search]);
 
   return (
     <div className="mt-5">
