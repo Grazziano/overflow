@@ -41,10 +41,12 @@ export default async function ViewQuestion({ params }: ViewQuestionProps) {
             </span>
           </span>
 
-          <span>
+          <Link href={`/users/${question.user._id}`}>
             Asked by{' '}
-            <span className="text-secondary">{question.user.name}</span>
-          </span>
+            <span className="text-secondary underline cursor-pointer">
+              {question.user.name}
+            </span>
+          </Link>
         </div>
       </div>
 

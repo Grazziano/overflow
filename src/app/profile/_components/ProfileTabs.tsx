@@ -136,7 +136,7 @@ export default function ProfileTabs({
             ))}
           </div>
 
-          {answeredQuestions.length === 0 && getEmptyMessage()}
+          {commentedQuestions.length === 0 && getEmptyMessage()}
         </Tab>
       </Tabs>
     </div>
