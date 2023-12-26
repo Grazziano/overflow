@@ -122,7 +122,8 @@ export default function QuestionForm({
         {question.tags.map((tag: string, index: number) => (
           <Chip
             key={index}
-            color="primary"
+            color="secondary"
+            variant="flat"
             onClose={() => {
               setQuestion({
                 ...question,

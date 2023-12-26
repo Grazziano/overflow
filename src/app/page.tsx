@@ -4,17 +4,31 @@ import QuestionCard from '@/components/QuestionCard';
 import { connectDB } from '@/config/db';
 import { IQuestion } from '@/interfaces';
 import QuestionModel from '@/models/questionModel';
-import { currentUser } from '@clerk/nextjs';
-import { User } from '@clerk/nextjs/server';
 import Link from 'next/link';
 
 connectDB();
 
-export default async function Home() {
-  await handleNewUserRegistration();
-  const user: User | null = await currentUser();
+interface HomeProps {
+  searchParams: {
+    tag: string;
+  };
+}
 
-  const questions: IQuestion[] = await QuestionModel.find()
+export default async function Home({ searchParams }: HomeProps) {
+  await handleNewUserRegistration();
+  const { tag } = searchParams;
+
+  let filtersObject = {};
+
+  if (tag) {
+    filtersObject = {
+      tags: {
+        $in: [tag],
+      },
+    };
+  }
+
+  const questions: IQuestion[] = await QuestionModel.find(filtersObject)
     .sort({ updatedAt: -1 })
     .populate('user');
 

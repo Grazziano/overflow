@@ -53,7 +53,7 @@ export default async function ViewQuestion({ params }: ViewQuestionProps) {
           <Link
             href={`/?tag=${tag}`}
             key={index}
-            className="bg-gray-100 p-2 rounded-md text-sm text-gray-600 capitalize underline cursor-pointer"
+            className="bg-primary/20 p-2 rounded-md text-sm text-gray-600 capitalize underline cursor-pointer"
           >
             {tag}
           </Link>
