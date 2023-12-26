@@ -33,6 +33,12 @@ const QuestionSchema = new mongoose.Schema(
       required: false,
       default: '0',
     },
+    savedBy: {
+      type: [mongoose.Schema.Types.ObjectId],
+      required: false,
+      default: [],
+      ref: 'users',
+    },
   },
   { timestamps: true }
 );

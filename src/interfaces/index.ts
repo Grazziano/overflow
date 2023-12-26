@@ -8,6 +8,7 @@ export interface IQuestion {
   code: string;
   tags: string[];
   user: IUser;
+  savedBy: string[];
 }
 
 export interface IUser {
