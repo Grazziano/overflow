@@ -1,36 +1,87 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Overflow - Question and Answer Platform
 
-## Getting Started
+Overflow é uma plataforma moderna de perguntas e respostas, desenvolvida com o objetivo de facilitar o compartilhamento de conhecimento entre desenvolvedores e entusiastas da tecnologia. A plataforma oferece uma interface intuitiva, autenticação segura e uma experiência rápida e dinâmica.
 
-First, run the development server:
+## Tecnologias Utilizadas
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+- **Next.js**: Framework de React para construção de interfaces web rápidas e otimizadas.
+- **Clerk Auth**: Sistema de autenticação completo e seguro, permitindo login, registro e gerenciamento de perfis de usuários.
+- **NextUI**: Biblioteca de componentes para construção de interfaces modernas e responsivas.
+- **MongoDB**: Banco de dados NoSQL utilizado para armazenar informações de usuários, perguntas, respostas e outros dados importantes da plataforma.
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Funcionalidades
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+- Autenticação de usuários (login e cadastro) via Clerk Auth
+- Publicação e edição de perguntas
+- Respostas a perguntas
+- Sistema de votação (upvote/downvote) para perguntas e respostas
+- Interface responsiva e amigável utilizando NextUI
+- Integração com MongoDB para armazenamento de dados
+- Filtro de perguntas por categorias e palavras-chave
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+## Como rodar o projeto localmente
 
-## Learn More
+### Pré-requisitos
 
-To learn more about Next.js, take a look at the following resources:
+- Node.js
+- MongoDB
+- Conta no Clerk para autenticação
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+### Passos
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+1. Clone este repositório:
 
-## Deploy on Vercel
+   ```bash
+   git clone https://github.com/Grazziano/overflow.git
+   ```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+2. Instale as dependências:
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+   ```bash
+   cd overflow
+   npm install
+   ```
+
+3. Configure as variáveis de ambiente:
+   Crie um arquivo `.env.local` e adicione as chaves de API do Clerk, URL do MongoDB e outras configurações.
+
+   ```
+   NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=<sua_clerk_frontend_api>
+   CLERK_SECRET_KEY=<sua_clerk_api_key>
+   MONGO_URL=<sua_mongodb_uri>
+   ```
+
+4. Execute a aplicação:
+
+   ```bash
+   npm run dev
+   ```
+
+5. Acesse a aplicação em [http://localhost:3000](http://localhost:3000).
+
+## Estrutura do Projeto
+
+- `/app`: Páginas principais da aplicação.
+- `/components`: Componentes reutilizáveis da interface.
+- `/helpers`: Funções auxiliares e configuração do MongoDB.
+- `/interfaces`: Interfaces da aplicação.
+- `/models`: Models do MongoDB.
+- `/providers`: Providers da aplicação.
+
+## Imagens da Aplicação
+
+Exemplos da interface de usuário.
+
+![Tela de Login](./public/screenshots/login.png)
+![Página Principal](./public/screenshots/home.png)
+![Página de Perguntas](./public/screenshots/ask-question.png)
+![Visualizar Pergunta](./public/screenshots/view-question.png)
+![Profile](./public/screenshots/profile.png)
+
+## Contribuições
+
+Contribuições são bem-vindas! Se você deseja melhorar esta plataforma, sinta-se à vontade para abrir uma issue ou enviar um pull request.
+
+## Licença
+
+Este projeto está licenciado sob a licença MIT. Veja o arquivo [LICENSE](LICENSE) para mais detalhes.
